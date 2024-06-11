@@ -11,13 +11,11 @@ export function middleware(request: NextRequest ) {
                              request.nextUrl.pathname === '/maintenance' || 
                              request.nextUrl.pathname === '/coming-soon'
 
-        const token = false
-        console.log(token, isPublicPage)
+        const token = request.cookies.get('token')?.value
         if(token && isPublicPage){
             return NextResponse.redirect(new URL('/backend/dashboard', request.nextUrl))
         }
 
-        // ถ้าไม่มี token และเข้าหน้าที่ต้องล็อกอิน ให้ redirect ไปหน้า login
         if(!token && !isPublicPage){
             return NextResponse.redirect(new URL('/login', request.nextUrl))
         }
