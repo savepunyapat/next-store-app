@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Container, styled } from "@mui/material"
+import { Box, Container, styled, useMediaQuery } from "@mui/material"
 import Sidebar from "@/app/components/back/sidebar/Sidebar"
 import Header from "@/app/components/back/header/Header"
 
@@ -29,14 +29,18 @@ export default function BackLayout({
   }: Readonly<{
     children: React.ReactNode
   }>) { 
+
+  const lgUp = useMediaQuery((theme: any) => theme.breakpoints.up('lg'))
+  const hideMenu: any = lgUp ? true : false
+
   return (
     <MainWrapper>
 
-        {/* Sidebar */}
-        <Sidebar />
-
+        {
+          hideMenu ? <Sidebar /> : null
+        }
+        
         <PageWrapper>
-            {/* Header */}
             <Header />
 
             <Container
@@ -44,7 +48,6 @@ export default function BackLayout({
                     maxWidth: "100%!important",
                 }}
             >
-                  {/* Page Content */}
                   <Box sx={{ minHeight: "calc(100vh - 170px)" }}>
                     {children}
                   </Box>

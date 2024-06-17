@@ -7,40 +7,44 @@ import {
   Divider,
   Alert,
   FormControlLabel,
-  FormGroup,
-} from "@mui/material";
-import * as Icons from "@mui/icons-material";
-import { loginType } from "@/app/(auth)/types/auth";
-import CustomCheckbox from "@/app/components/forms/theme-elements/CustomCheckbox";
-import CustomTextField from "@/app/components/forms/theme-elements/CustomTextField";
-import CustomFormLabel from "@/app/components/forms/theme-elements/CustomFormLabel";
-import AuthSocialButtons from "./AuthSocialButtons";
+  FormGroup
+} from '@mui/material'
+import * as Icons from "@mui/icons-material"
 
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { loginType } from "@/app/(auth)/types/auth"
+import CustomCheckbox from "@/app/components/forms/theme-elements/CustomCheckbox"
+import CustomTextField from "@/app/components/forms/theme-elements/CustomTextField"
+import CustomFormLabel from "@/app/components/forms/theme-elements/CustomFormLabel"
+import AuthSocialButtons from "./AuthSocialButtons"
 
-import { Controller, useForm } from "react-hook-form";
-import * as Yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-//import actions
-import { login } from "@/app/services/actions/authAction";
+import Link from "next/link"
+import { useRouter } from 'next/navigation'
+
+import { Controller, useForm } from "react-hook-form"
+import * as Yup from "yup"
+import { yupResolver } from "@hookform/resolvers/yup"
+
+import { login } from "@/app/services/actions/authAction"
+import { useState } from 'react'
 
 type User = {
-  username: string;
-  password: string;
-};
+  username: string
+  password: string
+}
 
 export default function AuthLogin({ title, subtitle, subtext }: loginType) {
+
+  const router = useRouter()
+
   const initialValue: User = {
-    username: "punyapatadmin2",
-    password: "AdminSave2@1234",
-  };
-  const router = useRouter();
-  //form validation
+    username: "punyapatadmin2", 
+    password: "AdminSave2@1234", 
+  }
+
   const formValidateSchema = Yup.object().shape({
     username: Yup.string().required("Username is required").trim(),
     password: Yup.string().required("Password is required").trim(),
-  });
+  })
 
   const {
     control,
@@ -49,17 +53,22 @@ export default function AuthLogin({ title, subtitle, subtext }: loginType) {
   } = useForm<User>({
     defaultValues: initialValue,
     resolver: yupResolver(formValidateSchema),
-  });
+  })
+
+  const [loginStatus, setLoginStatus] = useState('')
 
   const onSubmitLogin = async (data: User) => {
-    const response = await login(data);
-    if(response.success) {
-      router.push("/backend/dashboard");
-    }else{
-      console.log("Login Failed", response.error);
-    }
+    const response = await login(data)
 
-  };
+
+    if(response.success) {
+      setLoginStatus('success')
+      router.push("/backend/dashboard")
+    } else {
+      setLoginStatus('error')
+      console.log("Login Failed", response.error)
+    }
+  }
 
   return (
     <>
@@ -86,12 +95,23 @@ export default function AuthLogin({ title, subtitle, subtext }: loginType) {
           </Typography>
         </Divider>
       </Box>
-      <form
+
+      { loginStatus && (
+          <Alert severity={loginStatus == 'success' ? 'success':'error'} sx={{ mt: 2 }}>
+            <Typography variant="body2">
+              {loginStatus == 'success' ? 'Login Successfull' : 'Login Failed'}
+            </Typography>
+          </Alert>
+        )
+      }
+
+      <form 
         onSubmit={handleSubmit(onSubmitLogin)}
         noValidate
         autoComplete="off"
       >
         <Stack>
+
           <Box>
             <CustomFormLabel htmlFor="username">Username</CustomFormLabel>
             <Controller
@@ -117,9 +137,12 @@ export default function AuthLogin({ title, subtitle, subtext }: loginType) {
                 />
               )}
             />
-            {errors.username?.message ? (
-              <Alert severity="error">{errors.username?.message}</Alert>
-            ) : null}
+
+            {
+              errors.username?.message ? (
+                <Alert severity="error">{errors.username?.message}</Alert>
+              ) : null
+            }
           </Box>
 
           <Box>
@@ -143,12 +166,16 @@ export default function AuthLogin({ title, subtitle, subtext }: loginType) {
                   }}
                   autoComplete="password"
                   error={(errors.password?.message ?? "") != ""}
+                  // helperText={errors.password?.message?.toString()}
                 />
               )}
             />
-            {errors.password?.message ? (
-              <Alert severity="error">{errors.password?.message}</Alert>
-            ) : null}
+
+            {
+              errors.password?.message ? (
+                <Alert severity="error">{errors.password?.message}</Alert>
+              ) : null
+            }
           </Box>
 
           <Stack
@@ -175,6 +202,7 @@ export default function AuthLogin({ title, subtitle, subtext }: loginType) {
               Forgot Password ?
             </Typography>
           </Stack>
+
         </Stack>
         <Box>
           <Button
@@ -190,5 +218,5 @@ export default function AuthLogin({ title, subtitle, subtext }: loginType) {
       </form>
       {subtitle}
     </>
-  );
+  )
 }
