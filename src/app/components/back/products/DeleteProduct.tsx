@@ -27,13 +27,13 @@ const DeleteProduct: React.FC<DeleteProductProps> = ({
       try {
         const response = await deleteProduct(productId)
         console.log("Product deleted:", response)
-        onDeleted() // Notify parent component to refresh the product list
-        onClose() // Close the dialog
+        onDeleted()
+        onClose() 
       } catch (error) {
         console.error("Failed to delete product:", error)
       }
     } else {
-      onClose() // Ensure the dialog closes even if deletion is not executed
+      onClose() 
     }
   }
 

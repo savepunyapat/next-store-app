@@ -1,10 +1,11 @@
+/* eslint-disable react/display-name */
 import React from 'react'
 import { styled } from '@mui/material/styles'
 import { TextField } from '@mui/material'
 
 const CustomTextField = styled(
-  React.forwardRef((props: any) => <TextField {...props} />))
-  (({ theme }) => ({
+  React.forwardRef((props: any, ref: any) => <TextField ref={ref} {...props} />)
+)(({ theme }) => ({
   '& .MuiOutlinedInput-input::-webkit-input-placeholder': {
     color: theme.palette.text.secondary,
     opacity: '0.8',

@@ -22,16 +22,12 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
   open,
   onClose,
 }) => {
-  if (!product) return null // Render nothing if no product is selected
+  if (!product) return null 
 
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogContent sx={{ width: "400px" }}>
-        {/* <img
-          src={`${process.env.NEXT_PUBLIC_BASE_IMAGE_URL_API}/${product.product_picture}`}
-          alt={product.product_name}
-          style={{ width: "100%", marginBottom: "20px" }}
-        /> */}
+        
 
         <Box
           sx={{

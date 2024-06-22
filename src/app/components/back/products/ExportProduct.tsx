@@ -69,10 +69,8 @@ const ExportProduct: React.FC<ExportProductProps> = ({ products }) => {
     // Set the document title with date
     const title = `รายงานสินค้า - ${new Date().toLocaleDateString()}`
 
-    // Set the table headers
     const headers = [["#", "Product", "Category", "Price", "Unit", "Created"]]
 
-    // Set the table data with rows auto generated
     const data = products.map((product: Product, index: number) => [
       index + 1,
       product.product_name,
@@ -82,7 +80,6 @@ const ExportProduct: React.FC<ExportProductProps> = ({ products }) => {
       formatDate(product.created_date),
     ])
 
-    // Set the table options
     doc.autoTable({
       head: headers,
       body: data,
@@ -117,7 +114,6 @@ const ExportProduct: React.FC<ExportProductProps> = ({ products }) => {
     // PDF name as datetime
     const pdfName = `products-report-${new Date().toISOString()}.pdf`
 
-    // Save the PDF
     doc.save(pdfName)
   }
 

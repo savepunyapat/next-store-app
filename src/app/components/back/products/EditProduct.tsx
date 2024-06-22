@@ -80,46 +80,37 @@ const EditProduct: React.FC<EditProductProps> = ({
     if (fileInputRef.current) fileInputRef.current.value = ""
   }
 
-  // handle close edit dialog
   const handleCloseEdit = () => {
     onClose()
     setImagePreviewUrl("")
     reset()
   }
 
-  // Handle Submit Edit
   const onSubmitEdit = async (data: ProductEdit) => {
 
-    // console.log(data)
-    // console.log(editingProduct)
 
-    // รับค่าเป็น FormData
+
     const formData: any = new FormData()
 
-    // กำหนดค่าให้กับ FormData
     formData.append("product_name", data.product_name)
     formData.append("unit_price", data.unit_price.toString())
     formData.append("unit_in_stock", data.unit_in_stock.toString())
     formData.append("category_id", data.category_id)
     formData.append("modified_date", formatDateToISOWithoutMilliseconds(new Date()))
 
-    // Append image file to form data
     if (fileInputRef.current.files[0]) {
       formData.append("image", fileInputRef.current.files[0])
     }
 
-    // วนลูปออกมาดู
     for (let [key, value] of formData.entries()) {
       console.log(`${key}: ${value}`)
     }
 
-    // Call your API to submit the edited product
     try {
       const response = await updateProduct(product.product_id, formData)
       console.log(response)
-      // Call the onUpdated callback to refresh the product list
       onUpdated()
-      handleCloseEdit() // Close the dialog upon successful submission
+      handleCloseEdit() 
     } catch (error) {
       console.error("Failed to update product:", error)
     }
@@ -221,8 +212,8 @@ const EditProduct: React.FC<EditProductProps> = ({
                   id="category_id"
                   label="Category"
                   value={value}
-                  onChange={onChange} // Use field.onChange for change handler
-                  error={!!error} // Use fieldState.error to determine if there's an error
+                  onChange={onChange} 
+                  error={!!error} 
                 >
                   {categories.map((category) => (
                     <MenuItem key={category.value} value={category.value}>
@@ -237,7 +228,6 @@ const EditProduct: React.FC<EditProductProps> = ({
             </FormHelperText>
           </FormControl>
 
-          {/* File Input Edit Product*/}
           <input
             type="file"
             ref={fileInputRef}
